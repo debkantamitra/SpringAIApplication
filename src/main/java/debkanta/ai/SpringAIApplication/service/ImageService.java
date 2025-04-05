@@ -19,11 +19,18 @@ public class ImageService {
                 new ImagePrompt(prompt));
     }
 
-    public ImageResponse generateImagesWithOptions(String prompt) {
+    public ImageResponse generateImagesWithOptions(String prompt,
+                                                   String quality,
+                                                   int width,
+                                                   int height,
+                                                   int n) {
         return openAiImageModel.call(
                 new ImagePrompt(prompt, OpenAiImageOptions.builder()
                         .withModel("dall-e-2")
-                        .withN(4)
+                        .withN(n)
+                        .withWidth(width)
+                        .withHeight(height)
+                        .withQuality(quality)
                         .style("natural")
                         .build())
         );

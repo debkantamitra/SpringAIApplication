@@ -35,11 +35,25 @@ public class ChatController {
     }
 
     @GetMapping("generate-images")
-    public List<String> getGeneratedImages(@RequestParam String prompt) {
-        ImageResponse imageResponse = imageService.generateImagesWithOptions(prompt);
+    public List<String> getGeneratedImages(@RequestParam String prompt,
+                                           @RequestParam(defaultValue = "hd") String quality,
+                                           @RequestParam(defaultValue = "1") int n,
+                                           @RequestParam(defaultValue = "1024") int width,
+                                           @RequestParam(defaultValue = "1024") int height) {
+        long startTime = System.currentTimeMillis();
+        ImageResponse imageResponse = imageService.generateImagesWithOptions(prompt,
+                quality, width, height, n);
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        // Logging the time taken
+        System.out.println("Time taken to generate images: " + duration + " ms");
 
         return imageResponse.getResults().stream()
                 .map(result -> result.getOutput().getUrl())
                 .toList();
+
+
     }
 }
