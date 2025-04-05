@@ -3,6 +3,7 @@ package debkanta.ai.SpringAIApplication.controller;
 import debkanta.ai.SpringAIApplication.model.ChatAskRequestModel;
 import debkanta.ai.SpringAIApplication.service.ChatService;
 import debkanta.ai.SpringAIApplication.service.ImageService;
+import debkanta.ai.SpringAIApplication.service.RecipeService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.ai.image.ImageResponse;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,12 @@ import java.util.List;
 public class ChatController {
     private final ChatService chatService;
     private final ImageService imageService;
+    private final RecipeService recipeService;
 
-    public ChatController(ChatService chatService, ImageService imageService) {
+    public ChatController(ChatService chatService, ImageService imageService, RecipeService recipeService) {
         this.chatService = chatService;
         this.imageService = imageService;
+        this.recipeService = recipeService;
     }
 
     @PostMapping("ask")
@@ -53,7 +56,13 @@ public class ChatController {
         return imageResponse.getResults().stream()
                 .map(result -> result.getOutput().getUrl())
                 .toList();
+    }
 
+    @GetMapping("generate-recipe")
+    public String getGeneratedRecipe(@RequestParam String ingredients,
+                                     @RequestParam(defaultValue = "any") String cuisine,
+                                     @RequestParam(defaultValue = "") String dietaryRestrictions) {
 
+        return recipeService.generateRecipe(ingredients, cuisine, dietaryRestrictions);
     }
 }
