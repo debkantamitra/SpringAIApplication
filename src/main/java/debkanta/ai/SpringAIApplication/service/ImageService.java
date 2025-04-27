@@ -30,8 +30,6 @@ public class ImageService {
                         .withN(n)
                         .withWidth(width)
                         .withHeight(height)
-                        .withQuality(quality)
-                        .style("natural")
                         .build())
         );
     }
